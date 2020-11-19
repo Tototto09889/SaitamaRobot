@@ -1,61 +1,57 @@
-# Copyright (C) 2020 Alfiananda P.A
-#
-# Licensed under the General Public License, Version 3.0;
-# you may not use this file except in compliance with the License.
-#
+from random import randint
 
-import asyncio
-import os
-from asyncio.exceptions import TimeoutError
+import requests as r
+from SaitamaRobot import SUPPORT_CHAT, WALL_API, dispatcher
+from SaitamaRobot.modules.disable import DisableAbleCommandHandler
+from telegram import Update
+from telegram.ext import CallbackContext, run_async
 
-from telethon.errors.rpcerrorlist import YouBlockedUserError
-
-from userbot import CMD_HELP, bot
-from userbot.events import register
+# Wallpapers module by @TheRealPhoenix using wall.alphacoders.com
 
 
-@register(outgoing=True, pattern=r"^\.wall(?: |$)(.*)")
-async def _(event):
-    try:
-        query = event.pattern_match.group(1)
-        await event.edit("`Processing..`")
-        async with bot.conversation("@XBOTGBOT") as conv:
-            try:
-                query1 = await conv.send_message(f"/wall {query}")
-                asyncio.sleep(3)
-                r1 = await conv.get_response()
-                r2 = await conv.get_response()
-                await bot.send_read_acknowledge(conv.chat_id)
-            except YouBlockedUserError:
-                return await event.reply("Unblock @XBOTGBOT plox")
-            if r1.text.startswith("No"):
-                return await event.edit(f"`No result found for` **{query}**")
+@run_async
+def wall(update: Update, context: CallbackContext):
+    chat_id = update.effective_chat.id
+    msg = update.effective_message
+    args = context.args
+    msg_id = update.effective_message.message_id
+    bot = context.bot
+    query = " ".join(args)
+    if not query:
+        msg.reply_text("Please enter a query!")
+        return
+    else:
+        caption = query
+        term = query.replace(" ", "%20")
+        json_rep = r.get(
+            f"https://wall.alphacoders.com/api2.0/get.php?auth={WALL_API}&method=search&term={term}"
+        ).json()
+        if not json_rep.get("success"):
+            msg.reply_text(f"An error occurred! Report this @{SUPPORT_CHAT}")
+        else:
+            wallpapers = json_rep.get("wallpapers")
+            if not wallpapers:
+                msg.reply_text("No results found! Refine your search.")
+                return
             else:
-                img = await event.client.download_media(r1)
-                img2 = await event.client.download_media(r2)
-                await event.edit("`Uploading..`")
-                p = await event.client.send_file(
-                    event.chat_id,
-                    img,
-                    force_document=False,
-                    caption="Preview",
-                    reply_to=event.reply_to_msg_id,
-                )
-                await event.client.send_file(
-                    event.chat_id,
-                    img2,
-                    force_document=True,
-                    caption=f"{query}",
-                    reply_to=p,
-                )
-                await event.client.delete_messages(
-                    conv.chat_id, [r1.id, r2.id, query1.id]
-                )
-        await event.delete()
-        os.system("rm *.png *.jpg")
-    except TimeoutError:
-        return await event.edit("`@XBOTGBOT isnt responding..`")
+                index = randint(0, len(wallpapers) - 1)  # Choose random index
+                wallpaper = wallpapers[index]
+                wallpaper = wallpaper.get("url_image")
+                wallpaper = wallpaper.replace("\\", "")
+                bot.send_photo(
+                    chat_id,
+                    photo=wallpaper,
+                    caption='Preview',
+                    reply_to_message_id=msg_id,
+                    timeout=60)
+                bot.send_document(
+                    chat_id,
+                    document=wallpaper,
+                    filename='wallpaper',
+                    caption=caption,
+                    reply_to_message_id=msg_id,
+                    timeout=60)
 
 
-CMD_HELP.update({"wallpaper": ">`.wall <query>`"
-                 "\nUsage: search beautiful wallpaper image."})
+WALLPAPER_HANDLER = DisableAbleCommandHandler("wall", wall)
+dispatcher.add_handler(WALLPAPER_HANDLER)
