@@ -24,10 +24,10 @@ def wall(update: Update, context: CallbackContext):
         caption = query
         term = query.replace(" ", "%20")
         json_rep = r.get(
-            f"https://wall.alphacoders.com/search.php?search={term}"
+            f"https://wall.alphacoders.com/api2.0/get.php?auth={WALL_API}&method=search&term={term}"
         ).json()
         if not json_rep.get("success"):
-            msg.reply_text(f"An error occurred! Report this @{SUPPORT_CHAT}")
+            msg.reply_text(f"An error occurred! Report this {SUPPORT_CHAT}")
         else:
             wallpapers = json_rep.get("wallpapers")
             if not wallpapers:
