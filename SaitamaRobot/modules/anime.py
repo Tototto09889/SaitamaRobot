@@ -514,7 +514,7 @@ def site_search(update: Update, context: CallbackContext, site: str):
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>"
 
     elif site == "ani":
-        search_url = f"https://anitoki.xyz/search/?q={search_query}&post_type=post"
+        search_url = f"https://anitoki.xyz/search/?q={search_query}"
         html_text = requests.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {'class': "title"})
