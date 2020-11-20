@@ -13,7 +13,7 @@ from telegram.ext import CallbackContext, CallbackQueryHandler, run_async
 
 info_btn = "More Information"
 kaizoku_btn = "Kaizoku ☠️"
-kuso_btn = "Kuso 🏴‍☠️"
+ani_btn = "Ani 🏴‍☠️"
 prequel_btn = "⬅️ Prequel"
 sequel_btn = "Sequel ➡️"
 close_btn = "Close ❌"
@@ -513,17 +513,17 @@ def site_search(update: Update, context: CallbackContext, site: str):
             more_results = False
             result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>"
 
-    elif site == "kuso":
-        search_url = f"https://kusonime.com/?s={search_query}&post_type=post"
+    elif site == "ani":
+        search_url = f"https://anitoki.xyz/search/?q={search_query}&post_type=post"
         html_text = requests.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {'class': "title"})
 
-        result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>Kusonime</code>: \n"
+        result = f"<b>Hasil pencarian untuk</b> <code>{html.escape(search_query)}</code> <b>di situs</b> <code>Anitoki</code>: \n"
         for entry in search_result:
 
             if entry.text.strip() == "Nothing Found":
-                result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>Kusonime</code>"
+                result = f"<b>Hasil tidak ditemukan untuk</b> <code>{html.escape(search_query)}</code> <b>di</b> <code>Anitoki</code>"
                 more_results = False
                 break
 
@@ -550,8 +550,8 @@ def kaizoku(update: Update, context: CallbackContext):
 
 
 @run_async
-def kuso(update: Update, context: CallbackContext):
-    site_search(update, context, "kuso")
+def ani(update: Update, context: CallbackContext):
+    site_search(update, context, "ani")
 
 
 __help__ = """
@@ -565,7 +565,7 @@ Get information about anime, manga or characters from [AniList](anilist.co).
  • `/user <user>`*:* returns information about a MyAnimeList user.
  • `/upcoming`*:* returns a list of new anime in the upcoming seasons.
  • `/kaizoku <anime>`*:* search an anime on animekaizoku.com
- • `/kuso <anime>`*:* search an anime on kusonime.com
+ • `/ani <anime>`*:* search an anime on anitoki.xyz
  • `/airing <anime>`*:* returns anime airing info.
 
  """
@@ -577,7 +577,7 @@ MANGA_HANDLER = DisableAbleCommandHandler("manga", manga)
 USER_HANDLER = DisableAbleCommandHandler("user", user)
 UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming)
 KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku)
-KUSO_SEARCH_HANDLER = DisableAbleCommandHandler("kuso", kuso)
+ANI_SEARCH_HANDLER = DisableAbleCommandHandler("ani", ani)
 BUTTON_HANDLER = CallbackQueryHandler(button, pattern='anime_.*')
 
 dispatcher.add_handler(BUTTON_HANDLER)
@@ -587,16 +587,16 @@ dispatcher.add_handler(MANGA_HANDLER)
 dispatcher.add_handler(AIRING_HANDLER)
 dispatcher.add_handler(USER_HANDLER)
 dispatcher.add_handler(KAIZOKU_SEARCH_HANDLER)
-dispatcher.add_handler(KUSO_SEARCH_HANDLER)
+dispatcher.add_handler(ANI_SEARCH_HANDLER)
 dispatcher.add_handler(UPCOMING_HANDLER)
 
 __mod_name__ = "Anime"
 __command_list__ = [
     "anime", "manga", "character", "user", "upcoming", "kaizoku", "airing",
-    "kuso"
+    "ani"
 ]
 __handlers__ = [
     ANIME_HANDLER, CHARACTER_HANDLER, MANGA_HANDLER, USER_HANDLER,
-    UPCOMING_HANDLER, KAIZOKU_SEARCH_HANDLER, KUSO_SEARCH_HANDLER,
+    UPCOMING_HANDLER, KAIZOKU_SEARCH_HANDLER, ANI_SEARCH_HANDLER,
     BUTTON_HANDLER, AIRING_HANDLER
 ]
