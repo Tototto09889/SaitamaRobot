@@ -12,7 +12,7 @@ from telegram import (InlineKeyboardButton, InlineKeyboardMarkup, ParseMode,
 from telegram.ext import CallbackContext, CallbackQueryHandler, run_async
 
 info_btn = "More Information"
-neko_btn = "Neko ☠️"
+kaizoku_btn = "Kaizoku ☠️"
 kuso_btn = "Kuso 🏴‍☠️"
 prequel_btn = "⬅️ Prequel"
 sequel_btn = "Sequel ➡️"
@@ -497,21 +497,21 @@ def site_search(update: Update, context: CallbackContext, site: str):
         message.reply_text("Give something to search")
         return
 
-    if site == "neko":
-        search_url = f"https://nekopoi.xgorntv.workers.dev/?s={search_query}"
+    if site == "kaizoku":
+        search_url = f"https://animekaizoku.com/?s={search_query}"
         html_text = requests.get(search_url).text
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {'class': "post-title"})
 
         if search_result:
-            result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>NekoPoi</code>: \n"
+            result = f"<b>Search results for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>: \n"
             for entry in search_result:
-                post_link = "https://nekopoi.xgorntv.workers.dev/" + entry.a['href']
+                post_link = "https://animekaizoku.com/" + entry.a['href']
                 post_name = html.escape(entry.text)
                 result += f"• <a href='{post_link}'>{post_name}</a>\n"
         else:
             more_results = False
-            result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>NekoPoi</code>"
+            result = f"<b>No result found for</b> <code>{html.escape(search_query)}</code> <b>on</b> <code>AnimeKaizoku</code>"
 
     elif site == "kuso":
         search_url = f"https://kusonime.com/?s={search_query}"
@@ -545,8 +545,8 @@ def site_search(update: Update, context: CallbackContext, site: str):
 
 
 @run_async
-def neko(update: Update, context: CallbackContext):
-    site_search(update, context, "neko")
+def kaizoku(update: Update, context: CallbackContext):
+    site_search(update, context, "kaizoku")
 
 
 @run_async
@@ -564,7 +564,7 @@ Get information about anime, manga or characters from [AniList](anilist.co).
  • `/manga <manga>`*:* returns information about the manga.
  • `/user <user>`*:* returns information about a MyAnimeList user.
  • `/upcoming`*:* returns a list of new anime in the upcoming seasons.
- • `/neko <anime>`*:* search an anime on nekopoi.xgorntv.workers.dev
+ • `/kaizoku <anime>`*:* search an anime on animekaizoku.com
  • `/kuso <anime>`*:* search an anime on kusonime.com
  • `/airing <anime>`*:* returns anime airing info.
 
@@ -576,7 +576,7 @@ CHARACTER_HANDLER = DisableAbleCommandHandler("character", character)
 MANGA_HANDLER = DisableAbleCommandHandler("manga", manga)
 USER_HANDLER = DisableAbleCommandHandler("user", user)
 UPCOMING_HANDLER = DisableAbleCommandHandler("upcoming", upcoming)
-NEKO_SEARCH_HANDLER = DisableAbleCommandHandler("neko", neko)
+KAIZOKU_SEARCH_HANDLER = DisableAbleCommandHandler("kaizoku", kaizoku)
 KUSO_SEARCH_HANDLER = DisableAbleCommandHandler("kuso", kuso)
 BUTTON_HANDLER = CallbackQueryHandler(button, pattern='anime_.*')
 
@@ -586,17 +586,17 @@ dispatcher.add_handler(CHARACTER_HANDLER)
 dispatcher.add_handler(MANGA_HANDLER)
 dispatcher.add_handler(AIRING_HANDLER)
 dispatcher.add_handler(USER_HANDLER)
-dispatcher.add_handler(NEKO_SEARCH_HANDLER)
+dispatcher.add_handler(KAIZOKU_SEARCH_HANDLER)
 dispatcher.add_handler(KUSO_SEARCH_HANDLER)
 dispatcher.add_handler(UPCOMING_HANDLER)
 
 __mod_name__ = "Anime"
 __command_list__ = [
-    "anime", "manga", "character", "user", "upcoming", "neko", "airing",
+    "anime", "manga", "character", "user", "upcoming", "kaizoku", "airing",
     "kuso"
 ]
 __handlers__ = [
     ANIME_HANDLER, CHARACTER_HANDLER, MANGA_HANDLER, USER_HANDLER,
-    UPCOMING_HANDLER, NEKO_SEARCH_HANDLER, KUSO_SEARCH_HANDLER,
+    UPCOMING_HANDLER, KAIZOKU_SEARCH_HANDLER, KUSO_SEARCH_HANDLER,
     BUTTON_HANDLER, AIRING_HANDLER
 ]
