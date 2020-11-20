@@ -519,11 +519,11 @@ def site_search(update: Update, context: CallbackContext, site: str):
         soup = bs4.BeautifulSoup(html_text, "html.parser")
         search_result = soup.find_all("h2", {'class': "title"})
 
-        result = f"<b>Hasil pencarian untuk</b> <code>{html.escape(search_query)}</code> <b>di situs</b> <code>Anitoki</code>: \n"
+        result = f"<b>Ini dia hasil pencarian untuk</b> <code>{html.escape(search_query)}</code> <b>di Situs</b> <code>Anitoki</code>: \n"
         for entry in search_result:
 
             if entry.text.strip() == "Nothing Found":
-                result = f"<b>Hasil tidak ditemukan untuk</b> <code>{html.escape(search_query)}</code> <b>di</b> <code>Anitoki</code>"
+                result = f"<b>Hasil pencarian tidak ditemukan untuk</b> <code>{html.escape(search_query)}</code> <b>di Situs</b> <code>Anitoki</code>"
                 more_results = False
                 break
 
