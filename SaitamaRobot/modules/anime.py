@@ -1,38 +1,3 @@
-Skip to content
-Search or jump to…
-
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@Tototto09889 
-Learn Git and GitHub without any code!
-Using the Hello World guide, you’ll start a branch, write comments, and open a pull request.
-
-
-anonymousarmybot
-/
-nidhirobotbyanonymousarmy
-forked from AnimeKaizoku/SaitamaRobot
-0
-1320
-Code
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-nidhirobotbyanonymousarmy/SaitamaRobot/modules/anime.py /
-@TsunayoshiSawada
-TsunayoshiSawada SUDO_USERS are now DRAGONS
-Latest commit 90e77f1 on Oct 11
- History
- 6 contributors
-@DragSama@TsunayoshiSawada@Accipiter7@Dank-del@pWoLiAn@Loli-Killer
-602 lines (530 sloc)  19.2 KB
-  
 import datetime
 import html
 import textwrap
@@ -442,11 +407,13 @@ def user(update: Update, context: CallbackContext):
 
     caption += textwrap.dedent(f"""
     *Username*: [{user['username']}]({user['url']})
+
     *Gender*: `{user['gender']}`
     *Birthday*: `{user_birthday_formatted}`
     *Joined*: `{user_joined_date_formatted}`
     *Days wasted watching anime*: `{user['anime_stats']['days_watched']}`
     *Days wasted reading manga*: `{user['manga_stats']['days_read']}`
+
     """)
 
     caption += f"*About*: {about_string}"
@@ -589,7 +556,9 @@ def kayo(update: Update, context: CallbackContext):
 
 __help__ = """
 Get information about anime, manga or characters from [AniList](anilist.co).
+
 *Available commands:*
+
  • `/anime <anime>`*:* returns information about the anime.
  • `/character <character>`*:* returns information about the character.
  • `/manga <manga>`*:* returns information about the manga.
@@ -598,6 +567,7 @@ Get information about anime, manga or characters from [AniList](anilist.co).
  • `/kaizoku <anime>`*:* search an anime on animekaizoku.com
  • `/kayo <anime>`*:* search an anime on animekayo.com
  • `/airing <anime>`*:* returns anime airing info.
+
  """
 
 ANIME_HANDLER = DisableAbleCommandHandler("anime", anime)
@@ -630,15 +600,3 @@ __handlers__ = [
     UPCOMING_HANDLER, KAIZOKU_SEARCH_HANDLER, KAYO_SEARCH_HANDLER,
     BUTTON_HANDLER, AIRING_HANDLER
 ]
-© 2020 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
