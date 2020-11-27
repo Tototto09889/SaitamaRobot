@@ -208,10 +208,10 @@ def start(update: Update, context: CallbackContext):
                      [
                          InlineKeyboardButton(
                              text="🚑 Support Group",
-                             url=f""),
+                             url=f"https://t.me/OnePunchUpdates"),
                          InlineKeyboardButton(
                              text="🔔 Updates Channel",
-                             url="")
+                             url="https://t.me/OnePunchUpdates")
                      ],
                      [
                          InlineKeyboardButton(
